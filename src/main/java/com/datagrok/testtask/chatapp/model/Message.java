@@ -5,5 +5,6 @@ import lombok.*;
 @Data
 public class Message {
 
+    private String from;
     private String content;
 }
