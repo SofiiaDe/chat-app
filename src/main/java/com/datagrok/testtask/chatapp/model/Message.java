@@ -6,5 +6,5 @@ import lombok.*;
 public class Message {
 
     private String from;
-    private String content;
+    private String text;
 }

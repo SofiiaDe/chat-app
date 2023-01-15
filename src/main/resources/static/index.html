@@ -1,113 +1,80 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
     <title>Chat App</title>
-    <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
-    <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
-
-    <style>
-        #chat {
-            resize: none;
-            overflow: hidden;
-            min-height: 300px;
-            max-height: 300px;
-        }
-    </style>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/main.css" rel="stylesheet">
+    <!--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">-->
+    <!--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">-->
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/app.js"></script>
 </head>
-
 <body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
 <nav class="navbar navbar-default navbar-pf" role="navigation">
     <div class="navbar-header">
         <a class="navbar-brand" href="/">
-            <p><strong>>> Real-Time Chat!</strong></p>
+            <p><strong>Real-time Chat</strong></p>
         </a>
     </div>
 </nav>
-<div class="container">
-    <br/>
+<div id="main-content" class="container">
     <div class="row">
-        <input id="name" class="col-md-4" type="text" placeholder="your name">
-        <button id="connect" class="col-md-1 btn btn-primary" type="button">connect</button>
-        <br/>
-        <br/>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">Connection:</label>
+                    <button id="connect" class="btn btn-info" type="submit">Start chat</button>
+                    <button id="disconnect" class="btn btn-info" type="submit" disabled="disabled">End chat
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <input type="text" id="from" class="form-control" placeholder="Please enter your name here..."/>
+                </div>
+                <br/>
+                <br/>
+            </form>
+        </div>
     </div>
     <div class="row">
-        <textarea class="col-md-8" id="chat"></textarea>
+        <form class="form-inline">
+            <div class="form-group">
+                <textarea class="col-md-8" id="text" placeholder="Enter your message"></textarea>
+                <button id="send" class="btn btn-info" type="submit">Send</button>
+                <p id="response"></p>
+            </div>
+        </form>
     </div>
+    <!--    <div class="col-md-6">-->
+    <!--        <form class="form-inline">-->
+    <!--            <div class="form-group">-->
+    <!--                <label for="message"></label>-->
+    <!--                <input type="text" id="message" class="form-control" placeholder="Enter your message">-->
+    <!--            </div>-->
+    <!--            <button id="send" class="btn btn-info" type="submit">Send</button>-->
+    <!--        </form>-->
+    <!--    </div>-->
     <div class="row">
-        <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
-        <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Chat</th>
+                </tr>
+                </thead>
+                <tbody id="chat">
+                </tbody>
+            </table>
+        </div>
     </div>
-
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/js/patternfly.min.js"></script>
-
-<script type="text/javascript">
-    let connected = false;
-    let socket;
-
-    const scrollToBottom = function () {
-        $('#chat').scrollTop($('#chat')[0].scrollHeight);
-    };
-    const sendMessage = function () {
-        if (connected) {
-            const value = $("#msg").val();
-            console.log("Sending " + value);
-            socket.send(value);
-            $("#msg").val("");
-        }
-    };
-    const connect = function () {
-        if (!connected) {
-            const name = $("#name").val();
-            console.log("Val: " + name);
-            socket = new WebSocket("ws://" + location.host + "/chat/" + name);
-            socket.onopen = function () {
-                connected = true;
-                console.log("Connected to the web socket");
-                $("#send").attr("disabled", false);
-                $("#connect").attr("disabled", true);
-                $("#name").attr("disabled", true);
-                $("#msg").focus();
-            };
-            socket.onmessage = function (m) {
-                console.log("Got message: " + m.data);
-                $("#chat").append(m.data + "\n");
-                scrollToBottom();
-            };
-        }
-    };
-    $(document).ready(function () {
-        $("#connect").click(connect);
-        $("#send").click(sendMessage);
-
-        $("#name").keypress(function (event) {
-            if (event.keyCode === 13 || event.which === 13) {
-                connect();
-            }
-        });
-
-        $("#msg").keypress(function (event) {
-            if (event.keyCode === 13 || event.which === 13) {
-                sendMessage();
-            }
-        });
-
-        $("#chat").change(function () {
-            scrollToBottom();
-        });
-
-        $("#name").focus();
-    });
-
-</script>
 </body>
-
 </html>
