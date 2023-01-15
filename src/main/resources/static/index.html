@@ -4,17 +4,12 @@
     <title>Chat App</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
-    <!--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">-->
-    <!--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">-->
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/app.js"></script>
 </head>
 <body>
-<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-    enabled. Please enable
-    Javascript and reload this page!</h2></noscript>
 <nav class="navbar navbar-default navbar-pf" role="navigation">
     <div class="navbar-header">
         <a class="navbar-brand" href="/">
@@ -45,24 +40,6 @@
         </div>
     </div>
     <div class="row">
-        <form class="form-inline">
-            <div class="form-group">
-                <textarea class="col-md-8" id="text" placeholder="Enter your message"></textarea>
-                <button id="send" class="btn btn-info" type="submit">Send</button>
-                <p id="response"></p>
-            </div>
-        </form>
-    </div>
-    <!--    <div class="col-md-6">-->
-    <!--        <form class="form-inline">-->
-    <!--            <div class="form-group">-->
-    <!--                <label for="message"></label>-->
-    <!--                <input type="text" id="message" class="form-control" placeholder="Enter your message">-->
-    <!--            </div>-->
-    <!--            <button id="send" class="btn btn-info" type="submit">Send</button>-->
-    <!--        </form>-->
-    <!--    </div>-->
-    <div class="row">
         <div class="col-md-12">
             <table id="conversation" class="table table-striped">
                 <thead>
@@ -74,6 +51,15 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="row">
+        <form class="form-inline">
+            <div class="form-group">
+                <textarea class="col-md-8" id="text" placeholder="Enter your message"></textarea>
+                <button id="send" class="btn btn-info" type="submit">Send</button>
+                <p id="response"></p>
+            </div>
+        </form>
     </div>
 </div>
 </body>
